@@ -11,7 +11,7 @@ namespace Reportistica.Models
         [Required]
         public string Nome { get; set; }
         [Required]
-        public int DurataMinuti { get; set; }
+        public double DurataMinuti { get; set; }
         [Required]
         public int ShowId { get; set; }
     }
