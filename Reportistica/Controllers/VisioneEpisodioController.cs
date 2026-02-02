@@ -109,5 +109,101 @@ namespace Reportistica.Controller
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        //////////////////////////////////// STATISTICHE PER FRONTEND ///////////////////
+        
+        [HttpGet("stats/watchtime-totale/{utenteId}")]
+        public async Task<IActionResult> WatchtimeTotale(int utenteId)
+        {
+            try{
+                var minuti = await _context.VisioneEpisodio
+                    .Where(v => v.UtenteId == utenteId)
+                    .Join(_context.Episodio,
+                        v => v.EpisodioId,
+                        e => e.Id,
+                        (v, e) => e.DurataMinuti)
+                    .SumAsync();
+
+                return Ok(new
+                {
+                    UtenteId = utenteId,
+                    Minuti = minuti,
+                    Ore = Math.Round(minuti / 60.0, 2)
+                });
+                }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [HttpGet("stats/picco-mensile/{utenteId}")]
+        public async Task<IActionResult> PiccoMensile(int utenteId)
+        {
+            try{
+                var result = await _context.VisioneEpisodio
+                    .Where(v => v.UtenteId == utenteId)
+                    .Join(_context.Episodio,
+                        v => v.EpisodioId,
+                        e => e.Id,
+                        (v, e) => new
+                        {
+                            v.DataVisione,
+                            e.DurataMinuti
+                        })
+                    .GroupBy(x => new
+                    {
+                        Anno = x.DataVisione.Year,
+                        Mese = x.DataVisione.Month
+                    })
+                    .Select(g => new
+                    {
+                        g.Key.Anno,
+                        g.Key.Mese,
+                        Minuti = g.Sum(x => x.DurataMinuti)
+                    })
+                    .OrderByDescending(x => x.Minuti)
+                    .FirstOrDefaultAsync();
+
+                return Ok(result);
+            }
+        catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [HttpGet("stats/picco-giorno-settimana/{utenteId}")]
+        public async Task<IActionResult> PiccoGiornoSettimana(int utenteId)
+        {
+            try{
+                var result = await _context.VisioneEpisodio
+                    .Where(v => v.UtenteId == utenteId)
+                    .Join(_context.Episodio,
+                        v => v.EpisodioId,
+                        e => e.Id,
+                        (v, e) => new
+                        {
+                            GiornoSettimana = v.DataVisione.DayOfWeek,
+                            e.DurataMinuti
+                        })
+                    .GroupBy(x => x.GiornoSettimana)
+                    .Select(g => new
+                    {
+                        Giorno = g.Key,                 
+                        Episodi = g.Count(),            // metrica primaria
+                        Minuti = g.Sum(x => x.DurataMinuti) // metrica secondaria
+                    })
+                    .OrderByDescending(x => x.Episodi)
+                    .ThenByDescending(x => x.Minuti)
+                    .FirstOrDefaultAsync();
+
+                return Ok(result);
+                }
+            catch (Exception e)
+                {
+                    return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                }
+        }
     }
 }
