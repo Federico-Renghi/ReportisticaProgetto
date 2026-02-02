@@ -21,7 +21,7 @@ namespace Reportistica.Controller
         {
             try
             {
-                var shows = await _context.Utente.ToListAsync();
+                var shows = await _context.Show.ToListAsync();
                 return Ok(shows);
             }
             catch (Exception e)

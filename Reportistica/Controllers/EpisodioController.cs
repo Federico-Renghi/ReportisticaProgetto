@@ -21,7 +21,7 @@ namespace Reportistica.Controller
         {
             try
             {
-                var episodi = await _context.Utente.ToListAsync();
+                var episodi = await _context.Episodio.ToListAsync();
                 return Ok(episodi);
             }
             catch (Exception e)
