@@ -1,8 +1,63 @@
 @page
 @model InserimentoModel
+@{
+    Layout = "_Layout";
+}
 
-<h1>Inserimento visione episodio</h1>
+<h1>Nuova visualizzazione</h1>
 
-<p>Qui andrà la form</p>
+<!-- FORM GET: selezioni cascade -->
+<form method="get">
+    <input type="hidden" name="UtenteId" value="@Model.UtenteId" />
 
-<a href="/">Torna alla dashboard</a>
+    <!-- Tipo di show -->
+    <label>Tipo di show</label>
+    <select name="TipoShowId" onchange="this.form.submit()">
+        <option value="">-- seleziona --</option>
+        @foreach (var tipo in Model.TipiShow)
+        {
+            <option value="@tipo" @(Model.TipoShowId == tipo ? "selected" : "")>@tipo</option>
+        }
+    </select>
+
+    <!-- Show -->
+    <label>Show</label>
+    <select name="ShowId" onchange="this.form.submit()">
+        <option value="">-- seleziona --</option>
+        @foreach (var s in Model.Shows)
+        {
+            <option value="@s.Id" @(Model.ShowId == s.Id ? "selected" : "")>@s.Titolo</option>
+        }
+    </select>
+</form>
+
+<!-- FORM POST: salva la visione -->
+@if (Model.ShowId.HasValue)
+{
+    <form method="post">
+        <input type="hidden" asp-for="UtenteId" />
+        <input type="hidden" name="TipoShowId" value="@Model.TipoShowId" />
+        <input type="hidden" name="ShowId" value="@Model.ShowId" />
+
+        <!-- Episodio -->
+        <label>Episodio</label>
+        <select asp-for="EpisodioId" required>
+            <option value="">-- seleziona --</option>
+            @foreach (var e in Model.Episodi)
+            {
+                <option value="@e.Id">@e.Nome</option>
+            }
+        </select>
+
+        <!-- Data visione -->
+        <label>Data visione</label>
+        <input type="date" asp-for="DataVisione" required />
+
+        <button type="submit">Salva</button>
+    </form>
+}
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <p style="color:red">@Model.ErrorMessage</p>
+}
