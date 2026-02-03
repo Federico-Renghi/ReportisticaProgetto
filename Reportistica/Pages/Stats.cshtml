@@ -1,0 +1,49 @@
+@page
+@model StatsModel
+@{
+    Layout = "_Layout";
+}
+
+<h1>Statistiche utente @Model.Username</h1>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <p style="color:red">@Model.ErrorMessage</p>
+}
+else
+{
+    <p>Watchtime totale: @Model.WatchtimeMinuti minuti (@Model.WatchtimeOre ore)</p>
+
+    <h2>Watchtime per tipo di show</h2>
+    <div id="piechart" style="width: 600px; height: 400px;"></div>
+}
+
+<a href="/">Torna alla dashboard</a>
+
+@section Scripts {
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var rows = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.WatchtimePerTipo));
+
+            if (!rows || rows.length === 0) return;
+
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Tipo');
+            data.addColumn('number', 'Minuti');
+
+            data.addRows(rows.map(x => [x.Tipo, x.Minuti]));
+
+            var options = {
+                title: 'Watchtime per tipo di show',
+                pieHole: 0.4
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            chart.draw(data, options);
+        }
+    </script>
+}

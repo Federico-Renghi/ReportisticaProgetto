@@ -9,6 +9,8 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddControllers();
 
+builder.Services.AddRazorPages();
+
 builder.Services.AddDbContext<ReportisticaProgettoContext>(options =>
     options.UseMySQL(
         builder.Configuration.GetConnectionString("MySQL")
@@ -26,6 +28,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapControllers();
+
+app.MapRazorPages();
 
 app.Run();
 

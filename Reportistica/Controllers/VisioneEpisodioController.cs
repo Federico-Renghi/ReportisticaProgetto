@@ -137,6 +137,31 @@ namespace Reportistica.Controller
             }
         }
 
+        [HttpGet("stats/watchtime-per-tipo/{utenteId}")]
+        public async Task<IActionResult> WatchtimePerTipo(int utenteId)
+        {
+            var result = await _context.VisioneEpisodio
+                .Where(v => v.UtenteId == utenteId)
+                .Join(_context.Episodio,
+                    v => v.EpisodioId,
+                    e => e.Id,
+                    (v, e) => e)
+                .Join(_context.Show,
+                    e => e.ShowId,
+                    s => s.Id,
+                    (e, s) => new { s.Tipo, e.DurataMinuti })
+                .GroupBy(x => x.Tipo)
+                .Select(g => new
+                {
+                    Tipo = g.Key.ToString(),
+                    Minuti = g.Sum(x => x.DurataMinuti)
+                })
+                .ToListAsync();
+
+            return Ok(result);
+        }
+
+
         [HttpGet("stats/picco-mensile/{utenteId}")]
         public async Task<IActionResult> PiccoMensile(int utenteId)
         {

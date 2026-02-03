@@ -1,0 +1,18 @@
+@page
+@model IndexModel
+
+<h1>Ciao <span id="username">@Model.Username</span>!</h1>
+
+<div style="margin-top:20px">
+    <a href="/Stats?utenteId=@Model.UtenteId">
+        <button>Visualizza Statistiche</button>
+    </a>
+
+    <a href="/Inserimento?utenteId=@Model.UtenteId">
+        <button>Aggiungi Visualizzazione</button>
+    </a>
+</div>
+
+
+
+
