@@ -1,0 +1,67 @@
+.index-container {
+    /* keep within main .container (1000px) to avoid overflow */
+    max-width: 1000px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.index-container h1 {
+    font-size: 2rem;
+    margin-bottom: 40px;
+    color: #04080F;
+}
+
+
+.cards-container {
+    display: flex;
+    justify-content: center; /* centrato */
+    gap: 30px;
+    flex-wrap: wrap; /* permette di andare in colonna su schermi piccoli */
+}
+
+.cards-side {
+    flex: 1 1 45%; /* ciascuna card occupa circa metà dello spazio */
+    display: flex;
+    justify-content: center;
+    min-width: 280px; /* evita che la card diventi troppo piccola */
+}
+
+.card-link {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+}
+
+.card {
+    background-color: #A1C6EA;
+    border-radius: 12px;
+    padding: 30px 24px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    color: #04080F;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 220px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover effetto */
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.14);
+}
+
+.card h2 { margin-bottom: 10px; }
+.card p { font-size: 0.98rem; text-align: center; }
+
+/* Mobile */
+@media (max-width: 720px) {
+    .cards-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .cards-side { width: 100%; }
+}
