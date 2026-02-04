@@ -12,30 +12,35 @@
 }
 else
 {
-    <h2>Watchtime totale:</h2>
-    <p>@Model.WatchtimeMinuti minuti (@Model.WatchtimeOre ore)</p>
+    <div id="statsContainer" style="padding: 10px; background: white;">
 
-    <h2>Watchtime per tipo di show</h2>
-    <div id="piechart" style="width: 600px; height: 400px;"></div>
+        <h2>Watchtime totale:</h2>
+        <p id="watchtimeTotal">@Model.WatchtimeMinuti minuti (@Model.WatchtimeOre ore)</p>
 
-    <h2>Attività settimanale</h2>
-    <div id="columnchart" style="width: 700px; height: 400px;"></div>
+        <h2>Watchtime per tipo di show</h2>
+        <div id="piechart" style="width: 600px; height: 400px;"></div>
 
-    @if (!string.IsNullOrEmpty(Model.MesePicco))
-    {
-        <h2>Picco mensile</h2>
-        <p>
-            <strong>@Model.MesePicco</strong> —
-            @Model.MinutiPiccoMensile minuti visti
-        </p>
-    }
+        <h2>Attività settimanale</h2>
+        <div id="columnchart" style="width: 700px; height: 400px;"></div>
 
+        @if (!string.IsNullOrEmpty(Model.MesePicco))
+        {
+            <h2>Picco mensile</h2>
+            <p id="piccoMensile">
+                <strong>@Model.MesePicco</strong> — @Model.MinutiPiccoMensile minuti visti
+            </p>
+        }
+    </div>
+
+    <button id="exportPdf">Esporta in PDF</button>
 }
 
 <a href="/">Torna alla dashboard</a>
 
 @section Scripts {
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script>
         google.charts.load('current', { packages: ['corechart'] });
@@ -47,68 +52,55 @@ else
         }
 
         function drawPieChart() {
-            var rows = @Html.Raw(
-                            System.Text.Json.JsonSerializer.Serialize(Model.WatchtimePerTipo)
-                            );
-
-        if (!rows || rows.length === 0) return;
+            var rows = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.WatchtimePerTipo));
+            if (!rows || rows.length === 0) return;
 
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Tipo');
             data.addColumn('number', 'Minuti');
+            data.addRows(rows.map(x => [x.Tipo, x.Minuti]));
 
-            data.addRows(
-                rows.map(x => [x.Tipo, x.Minuti])
-            );
-
-            var options = {
-                pieHole: 0.4
-            };
-
-            var chart = new google.visualization.PieChart(
-                document.getElementById('piechart')
-            );
-
+            var options = { pieHole: 0.4 };
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
             chart.draw(data, options);
         }
 
         function drawColumnChart() {
-            var rows = @Html.Raw(
-                        System.Text.Json.JsonSerializer.Serialize(Model.WatchtimePerGiorno)
-                        );
-
-        if (!rows || rows.length === 0) return;
+            var rows = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.WatchtimePerGiorno));
+            if (!rows || rows.length === 0) return;
 
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Giorno');
             data.addColumn('number', 'Episodi');
-
-            data.addRows(
-                rows.map(x => [x.Giorno, x.Episodi])
-            );
+            data.addRows(rows.map(x => [x.Giorno, x.Episodi]));
 
             var options = {
                 legend: { position: 'none' },
-
-                hAxis: {
-                    title: 'Giorno della settimana',
-                },
-
-                vAxis: {
-                    title: 'Episodi visti',
-                    minValue: 0,
-                    format: '0'
-                },
-
+                hAxis: { title: 'Giorno della settimana' },
+                vAxis: { title: 'Episodi visti', minValue: 0, format: '0' },
                 bar: { groupWidth: '60%' },
                 chartArea: { width: '80%', height: '70%' }
             };
 
-            var chart = new google.visualization.ColumnChart(
-                document.getElementById('columnchart')
-            );
-
+            var chart = new google.visualization.ColumnChart(document.getElementById('columnchart'));
             chart.draw(data, options);
         }
+
+        // export html2cavas
+        document.getElementById('exportPdf').addEventListener('click', async () => {
+            const { jsPDF } = window.jspdf;
+            const container = document.getElementById('statsContainer');
+
+            const canvas = await html2canvas(container, { scale: 2 });
+
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF('p', 'mm', 'a4');
+
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save('Statistiche.pdf');
+        });
     </script>
 }
