@@ -21,7 +21,14 @@ namespace Reportistica.Controller
         {
             try
             {
-                var shows = await _context.Show.ToListAsync();
+                var shows = await _context.Show
+                    .Select(s => new {
+                        s.Id,
+                        s.Titolo,
+                        Tipo = s.Tipo.ToString() // <--- forza stringa
+                    })
+                    .ToListAsync();
+
                 return Ok(shows);
             }
             catch (Exception e)

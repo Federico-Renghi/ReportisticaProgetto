@@ -4,16 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Reportistica</title>
-    <link rel="stylesheet" href="~/css/site.css" />  <!-- eventuale CSS -->
+    <!-- <link rel="stylesheet" href="~/css/site.css" />  eventuale CSS -->
 </head>
 <body>
     <main role="main" class="container">
         @RenderBody()  <!-- qui va il contenuto della pagina Razor -->
     </main>
 
-
-    <!-- qui puoi mettere JS comuni -->
-    <script src="~/js/site.js"></script>
 
     <!-- qui vanno gli script specifici della pagina -->
     @RenderSection("Scripts", required: false)

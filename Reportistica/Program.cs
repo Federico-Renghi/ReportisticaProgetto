@@ -29,6 +29,8 @@ app.UseHttpsRedirection();
 
 app.MapControllers();
 
+app.UseStaticFiles();
+
 app.MapRazorPages();
 
 app.Run();
