@@ -4,15 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Reportistica</title>
-    <link rel="stylesheet" href="~/css/site.css" /> 
-    @section Styles {
-        <link rel="stylesheet" href="~/css/index.css" />
-    }
 
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    @RenderSection("Styles", required: false)
 </head>
 <body>
     <main role="main" class="container">
-        @RenderBody() 
+        @RenderBody()
     </main>
 
     @RenderSection("Scripts", required: false)

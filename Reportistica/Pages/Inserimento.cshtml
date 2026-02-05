@@ -5,9 +5,13 @@
     Layout = "_Layout";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/inserimento.css" />
+}
+
 <h1>Nuova visualizzazione</h1>
 
-<form method="post" id="formVisione">
+<form method="post" id="formVisione" class="form-vertical">
     @Html.AntiForgeryToken()
     <input type="hidden" asp-for="UtenteId" name="UtenteId" value="@Model.UtenteId" />
 
@@ -33,12 +37,21 @@
     <label>Data visione</label>
     <input type="date" asp-for="DataVisione" name="DataVisione" required />
 
-    <button type="submit">Salva</button>
+    <div class="form-actions">
+        <button type="submit">Salva</button>
+
+        <button
+            type="button"
+            class="btn-secondary"
+            onclick="window.location.href='/'">
+            Torna alla dashboard
+        </button>
+    </div>
 </form>
 
 @if (!string.IsNullOrEmpty(Model.ErrorMessage))
 {
-    <p style="color:red">@Model.ErrorMessage</p>
+    <p class="form-error">@Model.ErrorMessage</p>
 }
 
 <script src="/js/inserimento.js"></script>

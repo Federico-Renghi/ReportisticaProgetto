@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const res = await fetch('/api/Episodio');
             const episodi = await res.json();
-
+            debugger;
             const filtered = episodi.filter(e => e.showId === parseInt(showId));
 
             filtered.forEach(e => {
@@ -53,7 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 episodioSelect.appendChild(opt);
             });
 
-            episodioSelect.disabled = filtered.length === 0;
+            if (filtered.length === 1) {
+                episodioSelect.disabled = false;
+                episodioSelect.value = filtered[0].id;
+            } else {
+                episodioSelect.disabled = filtered.length === 0;
+            }
         } catch {
             console.error("Errore fetch Episodio:", err);
         }

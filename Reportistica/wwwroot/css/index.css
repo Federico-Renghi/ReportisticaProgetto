@@ -16,7 +16,6 @@
     display: flex;
     justify-content: center; /* centrato */
     gap: 30px;
-    flex-wrap: wrap; /* permette di andare in colonna su schermi piccoli */
 }
 
 .cards-side {
@@ -64,4 +63,25 @@
         gap: 20px;
     }
     .cards-side { width: 100%; }
+}
+body.fade-left {
+    animation: fadeLeft 0.4s forwards;
+}
+
+body.fade-right {
+    animation: fadeRight 0.4s forwards;
+}
+
+@keyframes fadeLeft {
+    to {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+}
+
+@keyframes fadeRight {
+    to {
+        opacity: 0;
+        transform: translateX(40px);
+    }
 }

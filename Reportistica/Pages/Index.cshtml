@@ -4,6 +4,11 @@
     Layout = "_Layout";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/index.css" />
+}
+
+
 <div class="index-container">
     <h1>Ciao <span id="username">@Model.Username</span>!</h1>
 
@@ -20,7 +25,7 @@
     <div class="cards-side cards-right">
         <a href="/Inserimento?utenteId=@Model.UtenteId" class="card-link" data-direction="right">
             <div class="card">
-                <h2>Aggiungi visione</h2>
+                <h2>Aggiungi visualizzazione</h2>
                 <p>Registra un nuovo episodio o film che hai visto</p>
             </div>
         </a>
@@ -37,8 +42,8 @@
                 const href = link.href;
                 const dir = link.dataset.direction;
 
-                if (dir === 'left') document.body.classList.add('fade-left');
-                else document.body.classList.add('fade-right');
+                if (dir === 'left') document.body.classList.add('fade-right');
+                else document.body.classList.add('fade-left');
 
                 setTimeout(() => window.location.href = href, 420);
             });

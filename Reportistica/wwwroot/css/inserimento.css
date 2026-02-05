@@ -1,0 +1,85 @@
+/* ===== FORM INSERIMENTO ===== */
+.form-vertical {
+    max-width: 420px;
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Titolo pagina */
+h1 {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 30px;
+}
+
+/* Label */
+.form-vertical label {
+    font-weight: 500;
+    color: #04080F;
+}
+
+/* Input & select */
+.form-vertical input,
+.form-vertical select {
+    width: 100%;
+    max-width: 100%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #BBD1EA;
+    font-size: 0.95rem;
+}
+
+/* Disabled */
+.form-vertical select:disabled {
+    background-color: #F1F5F9;
+    color: #9CA3AF;
+}
+
+/* Focus */
+.form-vertical input:focus,
+.form-vertical select:focus {
+    outline: none;
+    border-color: #507DBC;
+    box-shadow: 0 0 0 2px rgba(80,125,188,0.2);
+}
+
+/* Bottone */
+.form-vertical button {
+    margin-top: 20px;
+    align-self: center;
+    padding: 10px 28px;
+    font-size: 1rem;
+}
+
+/* Errore */
+.form-error {
+    margin-top: 20px;
+    text-align: center;
+    color: #EF4444;
+    font-weight: 500;
+}
+
+.form-actions {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+}
+
+/* Bottone secondario */
+.btn-secondary {
+    border: none;
+    background-color: #E5EEF9;
+    color: #04080F;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: #BBD1EA;
+    transform: translateY(-1px);
+}
