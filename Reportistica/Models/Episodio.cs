@@ -9,7 +9,7 @@ namespace Reportistica.Models
         [Key]
         public int Id { get; set; }
         [Required]
-        public string Nome { get; set; }
+        public required string Nome { get; set; }
         [Required]
         public double DurataMinuti { get; set; }
         [Required]

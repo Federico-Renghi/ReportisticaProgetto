@@ -10,7 +10,7 @@ namespace Reportistica.Models
         [Key]
         public int Id { get; set; }
         [Required]
-        public string Titolo { get; set; }
+        public required string Titolo { get; set; }
         public string? Genere { get; set; }
         [Required]
         public TipoShow Tipo { get; set; } //enum

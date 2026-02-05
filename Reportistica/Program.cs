@@ -11,10 +11,11 @@ builder.Services.AddControllers();
 
 builder.Services.AddRazorPages();
 
+var connectionString = builder.Configuration.GetConnectionString("MySQL")
+    ?? throw new InvalidOperationException("Connection string 'MySQL' not found.");
+
 builder.Services.AddDbContext<ReportisticaProgettoContext>(options =>
-    options.UseMySQL(
-        builder.Configuration.GetConnectionString("MySQL")
-    )
+    options.UseMySQL(connectionString)
 );
 
 var app = builder.Build();
